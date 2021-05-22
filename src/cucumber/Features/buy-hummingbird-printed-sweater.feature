@@ -17,3 +17,4 @@ Feature: Buy Hummingbird Printed Sweater
     Then  User sees ORDER IS CONFIRMED, and takes screenshot
     And   User goes to Order history and details page
     And   User checks if the order is on the list with Awaiting check payment status and the same amount
+    And   User logs out

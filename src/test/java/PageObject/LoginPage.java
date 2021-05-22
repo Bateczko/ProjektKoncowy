@@ -19,6 +19,10 @@ import org.openqa.selenium.support.PageFactory;
         @FindBy(id = "submit-login")
         private static WebElement signInButton;
 
+        @FindBy(xpath = "//*[@id='_desktop_user_info']" +
+                "//a[@class='logout hidden-sm-down']")
+        private static WebElement signOutButton;
+
         public LoginPage(WebDriver driver) {
             PageFactory.initElements(driver, this);
             this.driver = driver;
@@ -37,11 +41,16 @@ import org.openqa.selenium.support.PageFactory;
         }
 
         public String getLoggedUsername() {
-            WebElement userName = driver.findElement(By.xpath("//a[@class='account']"));
+            WebElement userName = driver.findElement
+                    (By.xpath("//a[@class='account']"));
             return userName.getText();
         }
 
         public String getFailedLoginMessage() {
             return driver.findElement(By.cssSelector("#content li")).getText();
+        }
+
+        public void signOut(){
+            signOutButton.click();
         }
     }

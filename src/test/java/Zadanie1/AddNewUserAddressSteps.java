@@ -12,13 +12,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AddNewUserAddressSteps {
     private WebDriver driver;
+    boolean correct = false;
 
     @Given("^User is logged in to shop$")
     public void userIsLoggedInToShop() {
@@ -30,7 +30,8 @@ public class AddNewUserAddressSteps {
         // Zmaksymalizuj okno przeglądarki
         driver.manage().window().maximize();
         // Przejdź do Google
-        driver.get("https://prod-kurs.coderslab.pl/index.php?controller=authentication");
+        driver.get("https://prod-kurs.coderslab.pl/" +
+                "index.php?controller=authentication");
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginAs("jankowalski@vp.pl", "6434737235");
@@ -38,33 +39,62 @@ public class AddNewUserAddressSteps {
 
     @When("^User goes to Address page$")
     public void userGoesToAddressPage() {
+        String addressPageUrl = "address";
         AddressPage addressPage = new AddressPage(driver);
+
         addressPage.clickAccountPageButton();
         addressPage.addNewAddress();
+
+        boolean dd = driver.getCurrentUrl().contains(addressPageUrl);
+        Assert.assertTrue(dd);
     }
 
     @And("^User inputs alias (.*), address (.*), postcode (.*), city (.*), phone (.*)$")
-    public void userInputsAddressPostcodeCity(String alias, String address, String postcode, String city, String phone) {
+    public void userInputsAddressPostcodeCity
+            (String alias, String address, String postcode, String city, String phone) {
+
         AddressPage addressPage = new AddressPage(driver);
         addressPage.changeAddress(alias, address, postcode, city, phone);
+
+        WebElement aliasInput = driver.findElement(By.xpath("//*[@name='alias']"));
+        WebElement addressInput = driver.findElement(By.name("address1"));
+        WebElement postcodeInput = driver.findElement(By.name("postcode"));
+        WebElement cityInput = driver.findElement(By.name("city"));
+        WebElement phoneInput = driver.findElement(By.name("phone"));
+
+        Assert.assertEquals(alias, aliasInput.getAttribute("value"));
+        Assert.assertEquals(address,addressInput.getAttribute("value"));
+        Assert.assertEquals(postcode, postcodeInput.getAttribute("value"));
+        Assert.assertEquals(city, cityInput.getAttribute("value"));
+        Assert.assertEquals(phone,phoneInput.getAttribute("value"));
     }
 
     @And("^User selects country$")
     public void userSelectsCountry() {
         AddressPage addressPage = new AddressPage(driver);
         addressPage.selectCountry();
+
+        WebElement countryInput = driver.findElement
+                (By.xpath("//*[@name='id_country']/option[@value='17']"));
+        Assert.assertEquals("United Kingdom", countryInput.getText());
     }
 
-    @And("^User saves new address$")
+    @And("^User saves new address and sees Address successfully added!$")
     public void userSavesNewAddress() {
         AddressPage addressPage = new AddressPage(driver);
         addressPage.saveNewAddress();
+
+        WebElement alertElement = driver.findElement
+                (By.xpath("//*[@id='notifications']//article//li"));
+        Assert.assertEquals("Address successfully added!", alertElement.getText());
     }
 
-    @Then("^User see Address successfully added! alias (.*), address (.*), postcode (.*), city (.*), phone (.*) and country is correct.$")
-    public void userSeeAddressSuccessfullyAdded(String alias, String address, String postcode, String city, String phone) {
+    @Then("^Alias (.*), address (.*), postcode (.*), city (.*), phone (.*) and country is correct.$")
+    public void userSeeAddressSuccessfullyAdded
+            (String alias, String address, String postcode, String city, String phone) {
         String country = "United Kingdom";
-        List <WebElement> addressElements = driver.findElements(By.xpath("//article/div[@class='address-body']"));
+        List <WebElement> addressElements = driver.findElements
+                (By.xpath("//article/div[@class='address-body']"));
 
         //Tworzenie listy wpisanych danych
         List<String> addressContain = new ArrayList<>();
@@ -80,7 +110,6 @@ public class AddNewUserAddressSteps {
         String lastAddress = addressElements.get(addressElements.size() - 1).getText();
 
         //Sprawdzenie czy ostatnio dodany adres zgadza sie z wpisanymi danymi
-        boolean correct = false;
         for (String item : addressContain) {
             if (lastAddress.contains(item)) {
                 correct = true;
@@ -88,17 +117,30 @@ public class AddNewUserAddressSteps {
             }
         }
         Assert.assertTrue(correct);
-
     }
 
-    @And("^User deletes address, and removes the address and logs out of the account$")
+    @And("^User removes the address$")
     public void userDeletesAddressAndRemovesTheAddressAndLogsOutOfTheAccount() {
         AddressPage addressPage = new AddressPage(driver);
-        addressPage.deleteAddressAndLogOut();
-    }
+        addressPage.deleteAddress();
 
+        List <WebElement> afterAddressElements = driver.findElements
+                (By.xpath("//article/div[@class='address-body']"));
+        Assert.assertEquals(1, afterAddressElements.size());
+    }
+    @And("^User logs out of the account$")
+    public void userLogsOutOfTheAccount() {
+        AddressPage addressPage = new AddressPage(driver);
+        addressPage.logOut();
+
+        WebElement signInOutElement = driver.findElement
+                (By.xpath("//*[@id='_desktop_user_info']//span"));
+        Assert.assertEquals("Sign in",signInOutElement.getText());
+    }
     @After
     public void tearDown() {
-        //driver.quit();
+        driver.quit();
     }
+
+
 }

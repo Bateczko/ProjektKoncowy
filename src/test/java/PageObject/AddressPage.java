@@ -108,7 +108,7 @@ import java.util.List;
             saveButton.click();
         }
 
-        public void deleteAddressAndLogOut(){
+        public void deleteAddress(){
             //Mozliwosc usuniecia wszystkich dodanych adresow jeśli i = 0
             //Obecnie zostawia 1 adres w celu wykonania zadania 2
             int deleteElementsCount = deleteElements.size();
@@ -116,6 +116,9 @@ import java.util.List;
                 deleteButton.click();
             }
             System.out.println("Liczba adresów użytkownika: " + deleteElements.size());
+        }
+
+        public void logOut () {
             signOutButton.click();
         }
     }

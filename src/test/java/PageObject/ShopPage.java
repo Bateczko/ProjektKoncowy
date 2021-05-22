@@ -97,6 +97,11 @@ public class ShopPage {
         }
     }
 
+    public String sizeSelected(){
+        return new Select(sizeElement).
+                getFirstSelectedOption().getText().trim();
+    }
+
     public void choiceQuantity(String quantity){
         new Actions(driver).click(quantityElement)
                 .pause(200).keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL)
@@ -106,17 +111,15 @@ public class ShopPage {
 
     public void addToCart(){
         addToCartButton.click();
+        proceedToCheckOutButton.click();
     }
 
     public void goToProceedToCheckout(){
-        proceedToCheckOutButton.click();
         proceedToCheckOutOnShoppingCartButton.click();
     }
 
     public void confirmTheAddress(){
-
-        if(addressRadioButton.isSelected()) {
-        } else {
+        if(!addressRadioButton.isSelected()) {
             addressRadioButton.click();
         }
     }
@@ -159,5 +162,4 @@ public class ShopPage {
     public void goToOrderHistoryAndDetail(){
         orderHistoryAndDetailsButton.click();
     }
-
 }

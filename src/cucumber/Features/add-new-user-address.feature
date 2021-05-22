@@ -5,9 +5,10 @@ Feature: Add new user address
     When  User goes to Address page
     And   User inputs alias <alias>, address <address>, postcode <postcode>, city <city>, phone <phone>
     And   User selects country
-    And   User saves new address
-    Then  User see Address successfully added! alias <alias>, address <address>, postcode <postcode>, city <city>, phone <phone> and country is correct.
-    And   User deletes address, and removes the address and logs out of the account
+    And   User saves new address and sees Address successfully added!
+    Then  Alias <alias>, address <address>, postcode <postcode>, city <city>, phone <phone> and country is correct.
+    And   User removes the address
+    And   User logs out of the account
 
     Examples:
       |alias    |address                         |postcode     |city     |phone        |
