@@ -1,6 +1,5 @@
 package PageObject;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,9 +14,6 @@ import java.util.List;
 
         @FindBy(xpath = "//a[@title='View my customer account']")
         private static WebElement accountPageButton;
-
-        @FindBy (xpath = "//*[@id='main']/header")
-        private static WebElement pageHeaderMessage;
 
         @FindBy(xpath = "//a[contains(@id,'address')]")
         private static WebElement addFirstAddressButton;
@@ -46,12 +42,6 @@ import java.util.List;
         @FindBy(xpath = "//footer/button")
         private static WebElement saveButton;
 
-        @FindBy(xpath = "//*[@data-link-action='delete-address']")
-        private static WebElement deleteButton;
-
-        @FindBy(xpath = "(//*[@class='address'])[last()]")
-        private static WebElement lastAddress;
-
         @FindBys({
                 @FindBy(xpath = "(//*[@class='address'])[last()]"),
                 @FindBy(css = "[data-link-action='delete-address'] span")
@@ -75,7 +65,6 @@ import java.util.List;
 
             String urlAddAddress = "addresses";
             String url = driver.getCurrentUrl();
-            //System.out.println("adres: " + url);
 
             //Porownanie adresow url
             if (url.contains(urlAddAddress)) {
@@ -83,7 +72,8 @@ import java.util.List;
             }
         }
 
-        public void changeAddress (String alias, String address, String postcode, String city, String phone){
+        public void changeAddress
+                (String alias, String address, String postcode, String city, String phone){
             aliasInput.click();
             aliasInput.clear();
             aliasInput.sendKeys(alias);

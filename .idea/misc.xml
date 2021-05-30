@@ -3,6 +3,7 @@
   <component name="EntryPointsManager">
     <writeAnnotations>
       <writeAnnotation name="org.openqa.selenium.support.FindBy" />
+      <writeAnnotation name="org.openqa.selenium.support.FindBys" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />

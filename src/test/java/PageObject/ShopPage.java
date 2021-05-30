@@ -1,13 +1,11 @@
 package PageObject;
 
-
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -57,6 +55,9 @@ public class ShopPage {
     @FindBy(xpath = "//*[@id='payment-confirmation']/div/button[@type='submit']")
     private static WebElement orderWithAnObligationToPayButton;
 
+    @FindBy(xpath = "//*[@id='content-hook_payment_return']//span[@class='price']")
+    private static WebElement totalPriceElement;
+
     @FindBy(xpath = "//*[@id='history-link']")
     private static WebElement orderHistoryAndDetailsButton;
 
@@ -95,11 +96,6 @@ public class ShopPage {
                 System.out.println("Nieprawidlowy rozmiar");
                 break;
         }
-    }
-
-    public String sizeSelected(){
-        return new Select(sizeElement).
-                getFirstSelectedOption().getText().trim();
     }
 
     public void choiceQuantity(String quantity){
@@ -156,7 +152,12 @@ public class ShopPage {
 
     public void screenShot() throws IOException {
         File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(scrFile, new File("E:\\CL automatyzacja\\ProjektKoncowy\\screenShot"));
+        FileUtils.copyFile(scrFile, new File
+                ("E:\\CL automatyzacja\\ProjektKoncowy\\screenShot"));
+    }
+
+    public double savePrice(){
+        return Double.parseDouble(totalPriceElement.getText().substring(1));
     }
 
     public void goToOrderHistoryAndDetail(){

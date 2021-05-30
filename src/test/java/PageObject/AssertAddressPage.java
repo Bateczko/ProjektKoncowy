@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssertAddressPage {
-    private WebDriver driver;
 
     @FindBy(xpath = "//article/div[@class='address-body']")
     private static List<WebElement> addressElements;
 
     public AssertAddressPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
-        this.driver = driver;
     }
 
     public boolean assertOfCorrectAddress
