@@ -1,8 +1,10 @@
 package PageObject;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import java.util.List;
@@ -47,12 +49,17 @@ import java.util.List;
         @FindBy(xpath = "//*[@data-link-action='delete-address']")
         private static WebElement deleteButton;
 
-        @FindBy(xpath = "//*[@id='_desktop_user_info']")
-        private static WebElement signOutButton;
+        @FindBy(xpath = "(//*[@class='address'])[last()]")
+        private static WebElement lastAddress;
+
+        @FindBys({
+                @FindBy(xpath = "(//*[@class='address'])[last()]"),
+                @FindBy(css = "[data-link-action='delete-address'] span")
+        })
+        private static WebElement lastAddressDelete;
 
         @FindBy (xpath = "//*[@data-link-action='delete-address']")
         private static List <WebElement> deleteElements;
-
 
         public AddressPage(WebDriver driver){
             PageFactory.initElements(driver, this);
@@ -109,17 +116,14 @@ import java.util.List;
         }
 
         public void deleteAddress(){
-            //Mozliwosc usuniecia wszystkich dodanych adresow jeśli i = 0
+            //Mozliwosc usuniecia wszystkich dodanych adresow jeśli i <= deleteElements.size()
             //Obecnie zostawia 1 adres w celu wykonania zadania 2
-            int deleteElementsCount = deleteElements.size();
-            for (int i = 1; i < deleteElementsCount; i++){
-                deleteButton.click();
+            for (int i = 0; i < deleteElements.size(); i++){
+                if (deleteElements.size() > 1) {
+                    lastAddressDelete.click();
+                }
             }
             System.out.println("Liczba adresów użytkownika: " + deleteElements.size());
-        }
-
-        public void logOut () {
-            signOutButton.click();
         }
     }
 
